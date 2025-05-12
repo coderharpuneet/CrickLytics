@@ -504,6 +504,40 @@ public class Main {
         System.out.println("Highest Team Total: " + highestTeam.getName() + " - " + highestScore + " runs");
     }
 
+
+
+    public static void deleteTeam() {
+    Scanner sc = new Scanner(System.in);
+    // After admin credentials check, proceed with team deletion
+    System.out.println("\n====== Delete Team ======");
+    System.out.print("Enter the Team Name to Delete: ");
+    String teamName = sc.nextLine();
+
+    if (!teamNames.contains(teamName)) {
+        System.out.println("Team not found!");
+        return;
+    }
+
+    // Find the team object from the list of teams
+    Team teamToDelete = null;
+    for (Team t : teams) {
+        if (t.getName().equalsIgnoreCase(teamName)) {
+            teamToDelete = t;
+            break;
+        }
+    }
+
+    // Deleting the team if found
+    if (teamToDelete != null) {
+        teams.remove(teamToDelete);
+        teamNames.remove(teamName);
+        FileManager.saveTeams(teams); // Save the updated team list to file
+        System.out.println("Team " + teamName + " has been deleted successfully.");
+    } else {
+        System.out.println("Team not found.");
+    }
+}
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -530,6 +564,7 @@ public class Main {
                 System.out.println("3. View Teams");
                 System.out.println("4. View Points Table");
                 System.out.println("5. Match History");
+                System.out.println("6. Delete Team");
                 System.out.println("==============================");
 
                 int adminChoice = sc.nextInt();
@@ -550,6 +585,9 @@ public class Main {
                         break;
                     case 5:
                         viewMatchHistory();
+                        break;
+                    case 6:
+                        deleteTeam();
                         break;
                     default:
                         System.out.println("Invalid choice! Please try again.");
