@@ -70,7 +70,6 @@ public class Team implements Serializable {
         points += 1;
     }
 
-    // NEW METHOD to update stats per match
     public void updateStats(int runsScored, double oversFaced, int runsConceded, double oversBowled) {
         this.totalRunsScored += runsScored;
         this.totalOversFaced += oversFaced;
@@ -78,10 +77,15 @@ public class Team implements Serializable {
         this.totalOversBowled += oversBowled;
     }
 
-    // NEW METHOD to get NRR
     public double getNRR() {
         double runRateFor = totalOversFaced > 0 ? totalRunsScored / totalOversFaced : 0;
         double runRateAgainst = totalOversBowled > 0 ? totalRunsConceded / totalOversBowled : 0;
         return runRateFor - runRateAgainst;
     }
+
+
+    public Player[] getPlayers() {
+    return players;
+}
+
 }
