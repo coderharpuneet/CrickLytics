@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
@@ -106,7 +105,7 @@ public class Main {
                     .anyMatch(p -> p != null && p.getName().equalsIgnoreCase(playerName));
 
             if (!playerExists) {
-                System.out.println("❌ Player not found in " + t1.getName() + " squad. Try again.");
+                System.out.println("Player not found in " + t1.getName() + " squad. Try again.");
                 continue;
             }
             System.out.print("Score of " + playerName + ": ");
@@ -134,7 +133,7 @@ public class Main {
             boolean bowlerExists = t2.getPlayers() != null && Arrays.stream(t2.getPlayers())
                     .anyMatch(p -> p != null && p.getName().equalsIgnoreCase(bowlerName));
             if (!bowlerExists) {
-                System.out.println("❌ Bowler not found in " + t2.getName() + " squad. Try again.");
+                System.out.println("Bowler not found in " + t2.getName() + " squad. Try again.");
                 continue;
             }
 
@@ -242,15 +241,15 @@ public class Main {
         t2.incrementMatchesPlayed();
 
         if (score1 == score2) {
-            System.out.println("\n🏏 Match Result: It's a Draw!");
+            System.out.println("\n Match Result: It's a Draw!");
             t1.incrementdraws();
             t2.incrementdraws();
         } else if (score1 > score2) {
-            System.out.println("\n🏆 " + team1 + " won the match!");
+            System.out.println("\n " + team1 + " won the match!");
             t1.incrementWins();
             t2.incrementLosses();
         } else {
-            System.out.println("\n🏆 " + team2 + " won the match!");
+            System.out.println("\n " + team2 + " won the match!");
             t2.incrementWins();
             t1.incrementLosses();
         }
@@ -265,7 +264,7 @@ public class Main {
         FileManager.saveMatches(matchHistory);
         FileManager.saveTeams(teams);
 
-        System.out.println("\n✅ Match Simulated and Saved Successfully!");
+        System.out.println("\n Match Simulated and Saved Successfully!");
     }
 
     public static void addNewTeam() {
@@ -403,7 +402,7 @@ public class Main {
 
         mergeSort(allPlayers, 0, allPlayers.size() - 1);
 
-        System.out.println("\n🏏 Orange Cap - Top 5 Run Scorers:");
+        System.out.println("\n Orange Cap - Top 5 Run Scorers:");
         for (int i = 0; i < Math.min(5, allPlayers.size()); i++) {
             Player p = allPlayers.get(i);
             System.out.println((i + 1) + ". " + p.getName() + " (" + p.getTeamName() + ") - " + p.getRuns() + " runs");
@@ -504,147 +503,174 @@ public class Main {
         System.out.println("Highest Team Total: " + highestTeam.getName() + " - " + highestScore + " runs");
     }
 
-
-
     public static void deleteTeam() {
-    Scanner sc = new Scanner(System.in);
-    // After admin credentials check, proceed with team deletion
-    System.out.println("\n====== Delete Team ======");
-    System.out.print("Enter the Team Name to Delete: ");
-    String teamName = sc.nextLine();
+        Scanner sc = new Scanner(System.in);
+        // After admin credentials check, proceed with team deletion
+        System.out.println("\n====== Delete Team ======");
+        System.out.print("Enter the Team Name to Delete: ");
+        String teamName = sc.nextLine();
 
-    if (!teamNames.contains(teamName)) {
-        System.out.println("Team not found!");
-        return;
-    }
+        if (!teamNames.contains(teamName)) {
+            System.out.println("Team not found!");
+            return;
+        }
 
-    // Find the team object from the list of teams
-    Team teamToDelete = null;
-    for (Team t : teams) {
-        if (t.getName().equalsIgnoreCase(teamName)) {
-            teamToDelete = t;
-            break;
+        // Find the team object from the list of teams
+        Team teamToDelete = null;
+        for (Team t : teams) {
+            if (t.getName().equalsIgnoreCase(teamName)) {
+                teamToDelete = t;
+                break;
+            }
+        }
+
+        if (teamToDelete != null) {
+            teams.remove(teamToDelete);
+            teamNames.remove(teamName);
+            FileManager.saveTeams(teams);
+            System.out.println("Team " + teamName + " has been deleted successfully.");
+        } else {
+            System.out.println("Team not found.");
         }
     }
 
-    // Deleting the team if found
-    if (teamToDelete != null) {
-        teams.remove(teamToDelete);
-        teamNames.remove(teamName);
-        FileManager.saveTeams(teams); // Save the updated team list to file
-        System.out.println("Team " + teamName + " has been deleted successfully.");
-    } else {
-        System.out.println("Team not found.");
-    }
-}
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        boolean exit = false; // Exit condition
 
-        System.out.println("==================================");
-        System.out.println("      Welcome to IPL Console      ");
-        System.out.println("==================================");
+        while (!exit) { // Loop until user chooses to exit
+            System.out.println("========================================================");
+            System.out.println("\tWelcome to CricStatz- IPL Console Manager\t");
+            System.out.println("========================================================");
 
-        System.out.println("\nChoose Login Type:");
-        System.out.println("------------------");
-        System.out.println("1. Admin");
-        System.out.println("2. User");
+            System.out.println("\nChoose Login Type:");
+            System.out.println("------------------");
+            System.out.println("1. Admin");
+            System.out.println("2. User");
+            System.out.println("3. Exit");
 
-        int choice = sc.nextInt();
-        sc.nextLine();
-
-        if (choice == 1) {
-            System.out.print("Enter Admin Password: ");
-            String adminPassword = sc.nextLine();
-
-            if (adminPassword.equals("admin123")) {
-                System.out.println("\n====== Admin Dashboard ======");
-                System.out.println("1. Simulate Match");
-                System.out.println("2. Add New Team");
-                System.out.println("3. View Teams");
-                System.out.println("4. View Points Table");
-                System.out.println("5. Match History");
-                System.out.println("6. Delete Team");
-                System.out.println("==============================");
-
-                int adminChoice = sc.nextInt();
-                sc.nextLine();
-
-                switch (adminChoice) {
-                    case 1:
-                        simulateMatch();
-                        break;
-                    case 2:
-                        addNewTeam();
-                        break;
-                    case 3:
-                        viewTeams();
-                        break;
-                    case 4:
-                        viewPointsTable();
-                        break;
-                    case 5:
-                        viewMatchHistory();
-                        break;
-                    case 6:
-                        deleteTeam();
-                        break;
-                    default:
-                        System.out.println("Invalid choice! Please try again.");
-                }
-            } else {
-                System.out.println("Incorrect Password!");
-            }
-        } else {
-            System.out.println("\n======= User Dashboard =======");
-            System.out.println("1. View Teams");
-            System.out.println("2. View Points Table");
-            System.out.println("3. Match History");
-            System.out.println("4. View Stats");
-            System.out.println("================================");
-
-            int userChoice = sc.nextInt();
+            int choice = sc.nextInt();
             sc.nextLine();
 
-            switch (userChoice) {
+            switch (choice) {
                 case 1:
-                    viewTeams();
-                    break;
-                case 2:
-                    viewPointsTable();
-                    break;
-                case 3:
-                    viewMatchHistory();
-                    break;
-                case 4:
-                    System.out.println("1. View a player Stats");
-                    System.out.println("2. Orange Cap");
-                    System.out.println("3. Purple Cap");
-                    System.out.println("4. Highest Team Total");
-                    int statsChoice = sc.nextInt();
-                    sc.nextLine();
-                    switch (statsChoice) {
-                        case 1:
-                            viewPlayerStats();
-                            break;
-                        case 2:
-                            orangeCap();
-                            break;
-                        case 3:
-                            purpleCap();
-                            break;
-                        case 4:
-                            highestTeamTotal();
-                            break;
-                        default:
-                            System.out.println("Invalid choice! Please try again.");
-                            break;
+                    System.out.print("Enter Admin Password: ");
+                    String adminPassword = sc.nextLine();
 
+                    if (adminPassword.equals("admin123")) {
+                        boolean adminExit = false; // Admin-specific exit condition
+                        while (!adminExit) {
+                            System.out.println("\n====== Admin Dashboard ======");
+                            System.out.println("1. Simulate Match");
+                            System.out.println("2. Add New Team");
+                            System.out.println("3. View Teams");
+                            System.out.println("4. View Points Table");
+                            System.out.println("5. Match History");
+                            System.out.println("6. Delete Team");
+                            System.out.println("7. Exit to Main Menu"); // Option to exit admin dashboard
+                            System.out.println("==============================");
+
+                            int adminChoice = sc.nextInt();
+                            sc.nextLine();
+
+                            switch (adminChoice) {
+                                case 1:
+                                    simulateMatch();
+                                    break;
+                                case 2:
+                                    addNewTeam();
+                                    break;
+                                case 3:
+                                    viewTeams();
+                                    break;
+                                case 4:
+                                    viewPointsTable();
+                                    break;
+                                case 5:
+                                    viewMatchHistory();
+                                    break;
+                                case 6:
+                                    deleteTeam();
+                                    break;
+                                case 7:
+                                    adminExit = true; // Exit admin dashboard
+                                    break;
+                                default:
+                                    System.out.println("Invalid choice! Please try again.");
+                            }
+                        }
+                    } else {
+                        System.out.println("Incorrect Password!");
                     }
                     break;
+
+                case 2:
+                    boolean userExit = false; // User-specific exit condition
+                    while (!userExit) {
+                        System.out.println("\n======= User Dashboard =======");
+                        System.out.println("1. View Teams");
+                        System.out.println("2. View Points Table");
+                        System.out.println("3. Match History");
+                        System.out.println("4. View Stats");
+                        System.out.println("5. Exit to Main Menu"); // Option to exit user dashboard
+                        System.out.println("================================");
+
+                        int userChoice = sc.nextInt();
+                        sc.nextLine();
+
+                        switch (userChoice) {
+                            case 1:
+                                viewTeams();
+                                break;
+                            case 2:
+                                viewPointsTable();
+                                break;
+                            case 3:
+                                viewMatchHistory();
+                                break;
+                            case 4:
+                                System.out.println("1. View a player Stats");
+                                System.out.println("2. Orange Cap");
+                                System.out.println("3. Purple Cap");
+                                System.out.println("4. Highest Team Total");
+                                int statsChoice = sc.nextInt();
+                                sc.nextLine();
+                                switch (statsChoice) {
+                                    case 1:
+                                        viewPlayerStats();
+                                        break;
+                                    case 2:
+                                        orangeCap();
+                                        break;
+                                    case 3:
+                                        purpleCap();
+                                        break;
+                                    case 4:
+                                        highestTeamTotal();
+                                        break;
+                                    default:
+                                        System.out.println("Invalid choice! Please try again.");
+                                        break;
+                                }
+                                break;
+                            case 5:
+                                userExit = true;
+                                break;
+                            default:
+                                System.out.println("Invalid choice! Please try again.");
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Exiting the program. Thank you for using CricStatz!");
+                    exit = true;
+                    break;
+
                 default:
                     System.out.println("Invalid choice! Please try again.");
             }
         }
+        sc.close();
     }
 }

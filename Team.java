@@ -10,7 +10,6 @@ public class Team implements Serializable {
     private int points;
     public Player[] players = new Player[11];
 
-    // NEW FIELDS for NRR
     private double totalRunsScored = 0;
     private double totalOversFaced = 0;
     private double totalRunsConceded = 0;
@@ -25,7 +24,6 @@ public class Team implements Serializable {
         this.points = 0;
     }
 
-    // Getters
     public String getName() {
         return name;
     }
